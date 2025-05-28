@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>محلی برای امیران حسین</title>
+  <style>
+    :root {
+      --bg-dark: #0d0d0d;
+      --bg-light: #f5f5f5;
+      --text-dark: #f5f5f5;
+      --text-light: #0d0d0d;
+      --accent: orange;
+    }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    header {
+      background: var(--accent);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .toggle-theme {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--bg-light);
+      color: var(--text-light);
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    .login, .admin, .post-list {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+    .hidden { display: none; }
+    input, textarea {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--accent);
+      border: none;
+      padding: 0.5rem 1rem;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .post {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>محلی برای امیران حسین</header>
+  <button class="toggle-theme" onclick="toggleTheme()">تغییر تم</button>
+
+  <div class="login" id="login">
+    <h2>ورود مدیر</h2>
+    <input id="user" placeholder="نام کاربری" />
+    <input id="pass" type="password" placeholder="رمز عبور" />
+    <button onclick="login()">ورود</button>
+  </div>
+
+  <div class="admin hidden" id="admin">
+    <h2>افزودن پست جدید</h2>
+    <input id="title" placeholder="عنوان پست" />
+    <input id="image" placeholder="لینک تصویر (اختیاری)" />
+    <textarea id="content" rows="5" placeholder="متن پست (Markdown)"></textarea>
+    <button onclick="addPost()">ذخیره پست</button>
+  </div>
+
+  <div class="post-list" id="posts"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    const correctUser = "amirhoseyngh447";
+    const correctPass = "138813881369";
+
+    function login() {
+      const u = document.getElementById("user").value;
+      const p = document.getElementById("pass").value;
+      if (u === correctUser && p === correctPass) {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("admin").classList.remove("hidden");
+      } else {
+        alert("اطلاعات ورود اشتباه است.");
+      }
+    }
+
+    function addPost() {
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+      const image = document.getElementById("image").value;
+      const date = new Date().toLocaleString("fa-IR");
+      const html = `
+        <div class="post">
+          <h3>${title}</h3>
+          <small>${date}</small>
+          ${image ? `<img src="${image}" />` : ""}
+          <div>${marked.parse(content)}</div>
+        </div>`;
+      document.getElementById("posts").innerHTML = html + document.getElementById("posts").innerHTML;
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
+      document.getElementById("image").value = "";
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      if (root.style.getPropertyValue("--bg-dark") === "#0d0d0d") {
+        root.style.setProperty("--bg-dark", "#f5f5f5");
+        root.style.setProperty("--text-dark", "#0d0d0d");
+      } else {
+        root.style.setProperty("--bg-dark", "#0d0d0d");
+        root.style.setProperty("--text-dark", "#f5f5f5");
+      }
+    }
+  </script>
+</body>
+</html>
